@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   resources :users
 
   get 'sessions/new'
+  get '/login_status', to: 'static_pages#login_status'
   
   resources :documents do
     resources :games

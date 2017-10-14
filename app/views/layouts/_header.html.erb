@@ -1,0 +1,47 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container d-flex justify-content-between">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">ICCG</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="#"><span class="glyphicon glyphicon-globe" style="color:#50BCEC"></span> Plaza</a></li>
+      <li><a href="#">Documents</a></li>
+      <li><a href="#">Admin</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-fire" style="color:orange"></span> Dequeue</a></li>
+      <li><a href=<%=logout_path%> data-method="delete" data-remote="true"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div id="signup_modal" class="modal fade" role="document">
+  <div class="modal-dialog">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Who are you?</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+          <%= form_for(:session, url: login_path) do |f| %>
+          <%= f.label :email %>
+          <%= f.email_field :email, class: 'form-control' %>
+          <%= f.label :password %>
+          <%= f.password_field :password, class: 'form-control' %>
+          <%= f.label :remember_me, class: "checkbox inline" do %>
+          <% end %>
+          <%= f.check_box :remember_me %>
+          <span>Remember me on this computer</span>
+          <%= f.submit "Log in", class: "btn btn-primary", remote: true %>
+          <% end %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <%= link_to "Have no account yet? Sign up now!", signup_path, class: "btn btn-small btn-primary" %>
+      </div>
+    </div>
+    
+  </div>
+</div>
