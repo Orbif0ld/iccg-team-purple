@@ -24,8 +24,9 @@
         <h4 class="modal-title">Who are you?</h4>
       </div>
       <div class="modal-body">
+        <div class="container"><span id="error_msg" class="alert alert-danger" style="display:none;">Wrong email or password.</span></div>
         <div>
-          <%= form_for(:session, url: login_path) do |f| %>
+          <%= form_for(:session, url: login_path, remote: true) do |f| %>
           <%= f.label :email %>
           <%= f.email_field :email, class: 'form-control' %>
           <%= f.label :password %>
@@ -34,7 +35,7 @@
           <% end %>
           <%= f.check_box :remember_me %>
           <span>Remember me on this computer</span>
-          <%= f.submit "Log in", class: "btn btn-primary", remote: true %>
+          <%= f.submit "Log in", class: "btn btn-primary"%>
           <% end %>
         </div>
       </div>
