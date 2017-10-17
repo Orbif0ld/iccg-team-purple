@@ -86,10 +86,15 @@ var add_listeners = function () {
     });
 }
 
+var periodic_events = function () {
+    setInterval(check_for_invite, 3000);
+};
+
 var init = function() {
     update();
     show_sign_in_if_logged_out();
     add_listeners();
+    periodic_events();
 };
 
 $(init);

@@ -1,3 +1,5 @@
+require 'byebug'
+
 ## Purpose:
 ## The purpose of this model is to coordinate the other models that are involved in playing
 ## synchronous games.
@@ -113,7 +115,7 @@ class SyncGamesManager < ApplicationRecord
     users = user.invite.users
     user_state[user] = :idle
     users.each { |usr| user_state[usr] = :queued if usr != user }
-    users_to_queue = user.invite.users_accepted
+    users_to_queue = users.select {|u| u != user}
     users_to_queue.each do |u|
       r_json, doc_ids = old_request[u]
       old_request[u] = nil
@@ -122,6 +124,8 @@ class SyncGamesManager < ApplicationRecord
       r.from_json r_json
       r.save
       docs.each {|d| r.documents << d}
+      u.request = r
+      u.save
     end
     Invite.destroy(user.invite.id)
     self.save

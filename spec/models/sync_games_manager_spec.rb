@@ -43,6 +43,15 @@ describe SyncGamesManager do
     SyncGamesManager.get
     @sgm = SyncGamesManager.get
   end
+  describe "if a player rejects an invite" do
+    it "2 players should be place back in the queue" do
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+      @sgm.declines_game User.find(2)
+      expect(@sgm.queued_users.size).to eq(2)
+    end
+  end
   describe "enqueues" do
     it "should cause a user to be reported as queued" do
       expect(@sgm.idle_users).to include(@user1)
