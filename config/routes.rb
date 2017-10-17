@@ -47,8 +47,12 @@ Rails.application.routes.draw do
   resource :sync_games_managers do
     get "general_activity"
     get "user_activity"
+    get "send_to_game_if_ready"
     post "enqueue"
     post "dequeue"
+    post "accept_invite"
+    post "decline_invite"
+    post "quit_game"
   end
 
   resources :games do

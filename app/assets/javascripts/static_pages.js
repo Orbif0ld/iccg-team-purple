@@ -1,3 +1,5 @@
+var waiting_for_invite = false;
+
 var show_sign_in_if_logged_out = function () {
     $.ajax({
         type: "GET",
@@ -31,15 +33,18 @@ var update = function() {
 };
 
 var check_for_invite = function () {
-    $.ajax({
-        type: "GET",
-        url: '/sync_games_managers/user_activity',
-        dataType: "JSON",
-        success: function (user) {
-            if (user.game_available) {
-                $("#invite_modal").modal("show");
-            };
-        }});
+    if (waiting_for_invite) {
+        $.ajax({
+            type: "GET",
+            url: '/sync_games_managers/user_activity',
+            dataType: "JSON",
+            success: function (user) {
+                if (user.game_available) {
+                    waiting_for_invite = false;
+                    $("#invite_modal").modal("show");
+                };
+            }});
+    };
 }
 
 var add_listeners = function () {
@@ -61,6 +66,7 @@ var add_listeners = function () {
 
     // queue when the queue-preferences are submitted
     $("#submit_preferences_button").on("click", function () {
+        waiting_for_invite = true;
         $.ajax({
             type: "POST",
             url: "/sync_games_managers/enqueue",
@@ -84,6 +90,19 @@ var add_listeners = function () {
             }
         });
     });
+
+    // pressing the accept button on an invite signals the server that the user has accepted
+    $("#accept_button").on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "/sync_games_managers/accept_invite",
+            dataType: "JSON",
+            success: function () {
+                console.log("Accepted invite.");
+                update();
+            }
+        });
+    });
 }
 
 var periodic_events = function () {
@@ -91,9 +110,9 @@ var periodic_events = function () {
 };
 
 var init = function() {
-    update();
     show_sign_in_if_logged_out();
     add_listeners();
+    update();
     periodic_events();
 };
 

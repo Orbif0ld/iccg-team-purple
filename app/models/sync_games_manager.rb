@@ -1,5 +1,3 @@
-require 'byebug'
-
 ## Purpose:
 ## The purpose of this model is to coordinate the other models that are involved in playing
 ## synchronous games.
@@ -163,7 +161,7 @@ class SyncGamesManager < ApplicationRecord
 
   # determine which role user is invited to play in
   # param user: user object representing the user of interest
-  # raises: StandardError if user is not invited
+  # raises: StandardError if user is not invited or playing
   # returns: :reader, :guesser or :judge
   def will_play_as (user)
     raise StandardError unless user_state[user] == :invited
@@ -179,10 +177,28 @@ class SyncGamesManager < ApplicationRecord
     end
   end
 
+  def playing_as (user)
+    raise StandardError unless (user_state[user] == :playing)
+    game = Game.find(games[user.id])
+    if game.reader.user_id == user.id
+      return :reader
+    elsif game.guesser.user_id == user.id
+      return :guesser
+    elsif game.judge.user_id == user.id
+      return :judge
+    else
+      raise StandardError # should never get here
+    end
+  end
+
   # determine if a game has started
   # returns: a boolean indiciating whether a game has started for this user
   def game_started_for (user)
     user_state[user] == :playing
+  end
+
+  def get_game_id_for (user)
+    games[user.id]
   end
 
   # get a user's current activity, as far as the syncronous games manager is concerned.

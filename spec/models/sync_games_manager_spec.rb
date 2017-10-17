@@ -52,6 +52,17 @@ describe SyncGamesManager do
       expect(@sgm.queued_users.size).to eq(2)
     end
   end
+  describe "if 3 players queue and accept their invites" do
+    it "a game should start" do
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+      @sgm.joins_game User.find(1)
+      @sgm.joins_game User.find(2)
+      @sgm.joins_game User.find(3)
+      expect(@sgm.playing_users.size).to eq(3)
+    end
+  end
   describe "enqueues" do
     it "should cause a user to be reported as queued" do
       expect(@sgm.idle_users).to include(@user1)
