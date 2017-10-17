@@ -236,19 +236,9 @@ button.btn.collapsed:before
   display: block;
 }
 
-
-table{
-  display:block;      
-  }
-tbody{
-  display:block;
-  overflow-y:scroll; 
-  height:200px;    
- }th{
-  width:5%;    
- }td{
-  width:5%;    
- }
+.table-fit {
+    width: 1px;
+}
 
 /* Game schema layout*/
 .contain {

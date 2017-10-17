@@ -14,8 +14,22 @@ var show_sign_in_if_logged_out = function () {
     });
 };
 
+var update = function() {
+    $.ajax({
+        type: "GET",
+        url: '/sync_games_managers/user_activity',
+        dataType: "JSON",
+        success: function (user) {
+            if (user.activity != "queued") {
+                $("#cleansing_fire").hide();
+            } else {
+                $("#cleansing_fire").show();
+            };
+        }});
+};
+
 var add_listeners = function () {
-    // close the modal if loin succeeds, dsiplay error message otherwise
+    // close the modal if login succeeds, dsiplay error message otherwise
     $("[action='/login']").on("ajax:success", function () {
         console.log("Hello!");
         $("#signup_modal").modal("hide");
@@ -31,12 +45,35 @@ var add_listeners = function () {
         $("#signup_modal").modal("show");
     });
 
-    $("#queue_button").on("click", function () {
-        console.log("Queuing up.");
+    // queue when the queue-preferences are submitted
+    $("#submit_preferences_button").on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "/sync_games_managers/enqueue",
+            dataType: "JSON",
+            success: function () {
+                console.log("Queued up.");
+                update();
+            }
+        });
+    });
+
+    // dequeue when the dequeue button is pressed
+    $("#cleansing_fire").on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "/sync_games_managers/dequeue",
+            dataType: "JSON",
+            success: function () {
+                console.log("Dequeued.");
+                update();
+            }
+        });
     });
 }
 
 var init = function() {
+    update();
     show_sign_in_if_logged_out();
     add_listeners();
 };

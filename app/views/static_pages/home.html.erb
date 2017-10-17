@@ -30,7 +30,7 @@
 </p>
 
 <div class="modal fade" id="queue_modal" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     
     <div class="modal-content">
       <div class="modal-header">
@@ -38,23 +38,35 @@
         <center><h4 class="modal-title">Queue for a game</h4></center>
       </div>
       <div class="modal-body">
-        <div class="form-check has-success">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" id="reader_check" value="option1">
-            Reader
-          </label>
+        <p style="color:red"> Note: the checkboxes are currently being ignored.
+          You will be queued for all roles and all documents.</p>
+        <div class="checkbox">
+          <label><input type="checkbox" value="" checked>Reader</label>
         </div>
-        <div class="form-check has-warning">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" id="guesser_check" value="option1">
-            Guesser
-          </label>
+        <div class="checkbox">
+          <label><input type="checkbox" value="" checked>Guesser</label>
         </div>
-        <div class="form-check has-danger">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" id="judge_check" value="option1">
-            Judge
-          </label>
+        <div class="checkbox">
+          <label><input type="checkbox" value="" checked>Judge</label>
+        </div>
+        <div class="container">
+          <table class="table table-bordered" style="width:60%">
+            <thead>
+              <tr>
+                <th>Collection</th>
+                <th>Want to play</th>
+              </tr>
+              </thead>
+            <tbody>
+              <tr>
+                <td>All documents</td>
+                <td>
+                  <div class="checkbox">
+                    <label><input type="checkbox" value="" checked></label>
+                  </div>
+                </td>
+            </tbody>
+          </table>
         </div>
         <p>
           <center>

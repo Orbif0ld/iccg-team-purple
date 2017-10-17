@@ -2,9 +2,6 @@ Rails.application.routes.draw do
   resources :invites
   resources :requests
   resources :collections
-  resources :sync_games_managers
-  resources :queued_players
-  resources :multiplayer_queues
   resources :lines
   resources :documents
   resources :whiteboards
@@ -46,13 +43,12 @@ Rails.application.routes.draw do
   end
 
   #  Add additional routes to the seven routes created by resources
-  resources :multiplayer_queues do
-    member do
-      get 'enqueue'
-      get 'wait'
-      get 'join'
-      get 'quit'
-    end
+
+  resource :sync_games_managers do
+    get "general_activity"
+    get "user_activity"
+    post "enqueue"
+    post "dequeue"
   end
 
   resources :games do
