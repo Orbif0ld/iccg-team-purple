@@ -15,6 +15,7 @@ var show_sign_in_if_logged_out = function () {
 };
 
 var add_listeners = function () {
+    // close the modal if loin succeeds, dsiplay error message otherwise
     $("[action='/login']").on("ajax:success", function () {
         console.log("Hello!");
         $("#signup_modal").modal("hide");
@@ -24,9 +25,14 @@ var add_listeners = function () {
         $("#error_msg").show()
     });
 
+    // open the login modal if just logged out
     $("[href='/logout']").on("ajax:success", function (response) {
         console.log("Bye!");
         $("#signup_modal").modal("show");
+    });
+
+    $("#queue_button").on("click", function () {
+        console.log("Queuing up.");
     });
 }
 

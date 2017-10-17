@@ -1,1 +1,71 @@
+<div id="explanation" class="container">
+  <div class="panel panel-default" style="background-color:#ABC9ED">
+    <div class="panel-body">
+      <h2>The game</h2>
+      <p>
+        A game has three roles: guesser, reader and judge. Every game contains a story of some kind,
+        which is available to the reader and the judge. During each round, the reader or the guesser
+        gets to ask a question about the document. Both the reader and guesser must answer that question.
+        After they both have answered, they can see each other's answers. The judge will receive both answers
+        anonymously, and needs to select which answer he/she thinks originated from the reader. The 3 players
+        are not allowed to communicate outside of the game app.
+      </p>
+      
+      <p>
+        <h2>Game score</h2>
+        <ul>
+          <li>Judge and reader gain 1 point whenever the judge successfully identifies
+            an answer given by the guesser. </li>
+          <li>The reader gains 1 point whenever the judge fails to correctly identify
+            the guesser's answer.</li>
+        </ul>
+      </p>
+    </div>
+  </div>
+</div>
+<p>
+  <center>
+    <button id="queue_button" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#queue_modal">Queue for a game</button>
+  </center>
+</p>
 
+<div class="modal fade" id="queue_modal" role="dialog">
+  <div class="modal-dialog">
+    
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <center><h4 class="modal-title">Queue for a game</h4></center>
+      </div>
+      <div class="modal-body">
+        <div class="form-check has-success">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="reader_check" value="option1">
+            Reader
+          </label>
+        </div>
+        <div class="form-check has-warning">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="guesser_check" value="option1">
+            Guesser
+          </label>
+        </div>
+        <div class="form-check has-danger">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" id="judge_check" value="option1">
+            Judge
+          </label>
+        </div>
+        <p>
+          <center>
+            <button id="submit_preferences_button" type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Queue</button>
+          </center>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
