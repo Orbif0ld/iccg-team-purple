@@ -98,6 +98,8 @@ var add_listeners = function () {
             url: "/sync_games_managers/accept_invite",
             dataType: "JSON",
             success: function () {
+                waiting_for_invite = false;
+                $.get("/sync_games_managers/send_to_game_if_ready");
                 console.log("Accepted invite.");
                 update();
             }
