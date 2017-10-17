@@ -21,12 +21,26 @@ var update = function() {
         dataType: "JSON",
         success: function (user) {
             if (user.activity != "queued") {
-                $("#cleansing_fire").hide();
+                $("#cleansing_fire,#central_dequeue").hide();
+                $("#queue_button").show();
             } else {
-                $("#cleansing_fire").show();
+                $("#cleansing_fire,#central_dequeue").show();
+                $("#queue_button").hide();
             };
         }});
 };
+
+var check_for_invite = function () {
+    $.ajax({
+        type: "GET",
+        url: '/sync_games_managers/user_activity',
+        dataType: "JSON",
+        success: function (user) {
+            if (user.game_available) {
+                $("#invite_modal").modal("show");
+            };
+        }});
+}
 
 var add_listeners = function () {
     // close the modal if login succeeds, dsiplay error message otherwise
@@ -59,7 +73,7 @@ var add_listeners = function () {
     });
 
     // dequeue when the dequeue button is pressed
-    $("#cleansing_fire").on("click", function () {
+    $("#cleansing_fire,#central_dequeue").on("click", function () {
         $.ajax({
             type: "POST",
             url: "/sync_games_managers/dequeue",

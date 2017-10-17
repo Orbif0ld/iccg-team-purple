@@ -1,8 +1,6 @@
-require 'byebug'
-
 class SyncGamesManagersController < ApplicationController
 
-  # before_action :require_login
+  before_action :require_login
   before_action :get_sgm
 
   def general_activity
@@ -35,7 +33,7 @@ class SyncGamesManagersController < ApplicationController
     @sgm.dequeues current_user
   end
 
-  def accept_inivte
+  def accept_invite
   end
 
   def decline_invite
