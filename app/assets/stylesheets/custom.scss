@@ -231,13 +231,15 @@ button.btn.collapsed:before
     width: 120px
 }
 .document-scroll{
-  height: 100px;
+  height: auto;
   overflow-y: scroll;
   display: block;
 }
 
 .table-fit {
-    width: 1px;
+  word-wrap: break-word; 
+  table-layout:fixed;
+  width: 100%;
 }
 
 /* Game schema layout*/

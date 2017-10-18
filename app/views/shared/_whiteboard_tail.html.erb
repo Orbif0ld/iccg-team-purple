@@ -1,0 +1,14 @@
+<% @whiteboard.reverse.each do |line| %>
+<tr>
+  <td><%= line[:question] %></td>
+  <td><%= line[:reader_answer] %></td>
+  <td><%= line[:guesser_answer] %></td>
+  <td>
+    <% if line[:guesser_marked]%>
+    Yes
+    <% else %>
+    No
+    <% end %>
+  </td>
+</tr>
+<% end %>

@@ -1,1 +1,45 @@
-Play as Judge here.
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      Question: ...
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p>Answer 1: ...</p>
+      <p>Answer 2: ...</p>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="whiteboard">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Whiteboard</h2>
+      <center><h6 style="color:blue">(more)</h6></center>
+    </div>
+    <div class="panel-body">
+      <%= render partial: "shared/whiteboard_head" %>
+      <div class="container" id="whiteboard_body" hidden>
+        <%= render partial: "/shared/whiteboard_tail"%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="document">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2>Document</h2>
+      <center><h6 style="color:blue">(more)</h6></center>
+    </div>
+    <div class="panel-body">
+      <div class="container" id="document_body" hidden>
+        <%= render partial: "/shared/document"%>
+      </div>
+    </div>
+  </div>
+</div>

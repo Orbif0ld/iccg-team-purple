@@ -1,6 +1,11 @@
 class JudgesController < ApplicationController
 
   before_action :get_judge
+
+  def show
+    @whiteboard = @player.get_whiteboard_hashes
+    @document = @player.game.document
+  end
   
   def get_round_data
     question = if @player.question_available? then @player.get_question else "" end

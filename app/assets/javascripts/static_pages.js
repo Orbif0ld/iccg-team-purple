@@ -114,6 +114,7 @@ var add_listeners = function () {
             dataType: "JSON",
             success: function () {
                 console.log("Dequeued.");
+                waiting_for_invite = false;
                 update();
             }
         });
@@ -130,6 +131,21 @@ var add_listeners = function () {
                 waiting_for_accepts = true;
                 $("#accept_decline").hide();
                 console.log("Accepted invite.");
+                update();
+            }
+        });
+    });
+
+    // pressing the decline button on an invite dequeues the user
+    $("#decline_button").on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "/sync_games_managers/decline_invite",
+            dataType: "JSON",
+            success: function () {
+                waiting_for_invite = false;
+                waiting_for_accepts = false;
+                console.log("Declined invite.");
                 update();
             }
         });
