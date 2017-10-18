@@ -1,4 +1,5 @@
 var waiting_for_invite = false;
+var waiting_for_accepts = false;
 
 var show_sign_in_if_logged_out = function () {
     $.ajax({
@@ -41,11 +42,38 @@ var check_for_invite = function () {
             success: function (user) {
                 if (user.game_available) {
                     waiting_for_invite = false;
+                    waiting_for_accepts = true;
+                    $("#invite_status_indicator").text(user.invite_status + "users have accepted");
+                    $("#accept_decline").show();
                     $("#invite_modal").modal("show");
                 };
             }});
     };
 }
+
+var update_invite_status = function () {
+    if (waiting_for_accepts) {
+        $.ajax({
+            type: "GET",
+            url: '/sync_games_managers/user_activity',
+            dataType: "JSON",
+            success: function (user) {
+                $("#invite_status_indicator").text(user.invite_status + " users have accepted");
+                if (!(user.game_available || user.game_started)) {
+                    $("#invite_status_indicator").text("Somebody declined the game.");
+                    setTimeout(function() {
+                        $("#invite_modal").modal("hide");
+                    }, 3000);
+                        
+                } else if (user.game_started) {
+                    waiting_for_accepts = false;
+                    $.get("/sync_games_managers/send_to_game");
+                    $("#invite_modal").modal("hide");
+                    $("#invite_status_indicator").text("0 users have accepted");
+                };
+            }});
+    };
+};
 
 var add_listeners = function () {
     // close the modal if login succeeds, dsiplay error message otherwise
@@ -99,7 +127,8 @@ var add_listeners = function () {
             dataType: "JSON",
             success: function () {
                 waiting_for_invite = false;
-                $.get("/sync_games_managers/send_to_game_if_ready");
+                waiting_for_accepts = true;
+                $("#accept_decline").hide();
                 console.log("Accepted invite.");
                 update();
             }
@@ -109,6 +138,7 @@ var add_listeners = function () {
 
 var periodic_events = function () {
     setInterval(check_for_invite, 3000);
+    setInterval(update_invite_status, 500);
 };
 
 var init = function() {

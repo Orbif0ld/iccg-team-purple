@@ -85,12 +85,16 @@
         <h4 class="modal-title">Random ICCG</h4>
       </div>
       <div class="modal-body">
-        Your role: <span id="role"></span>
+        <div>Your role: <span id="role"></span></div>
+        <div id="invite_status_indicator">
+        </div>
       </div>
       <div class="modal-footer">
         <center>
-          <button id="accept_button" type="button" class="btn btn-success btn-lg" data-dismiss="modal">Accept</button>
-          <button id="decline_button" type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Decline</button>
+          <div id="accept_decline">
+            <button id="accept_button" type="button" class="btn btn-success btn-lg">Accept</button>
+            <button id="decline_button" type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Decline</button>
+          </div>
         </center>
       </div>
     </div>

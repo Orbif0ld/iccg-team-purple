@@ -16,11 +16,13 @@ class SyncGamesManagersController < ApplicationController
   def user_activity
     game_available = @sgm.game_available_for?(current_user)
     will_play_as = if game_available then @sgm.will_play_as(current_user) else nil end
+    invite_status = if game_available then current_user.invite.users_accepted.size else 0 end
     activity = {
       game_available: game_available,
       will_play_as: will_play_as,
       game_started: @sgm.game_started_for(current_user),
-      activity: @sgm.get_activity(current_user)
+      activity: @sgm.get_activity(current_user),
+      invite_status: invite_status
     }
     render json: activity
   end
@@ -45,7 +47,7 @@ class SyncGamesManagersController < ApplicationController
     @sgm.quits_game current_user
   end
 
-  def send_to_game_if_ready
+  def send_to_game
     role = @sgm.playing_as current_user
     if @sgm.game_started_for current_user
       if role == :reader
