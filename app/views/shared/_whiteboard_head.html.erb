@@ -1,3 +1,5 @@
+<% line = @whiteboard.last %>
+<% if line%>
 <table class="table table-striped table-bordered table-responsive whiteboard-scroll">
   <thead>
     <tr>
@@ -7,19 +9,25 @@
       <th> Guesser identified </th>
     </tr>
   </thead>
-  <% line = @whiteboard.last %>
-  <% if line%>
-  <tr>
-    <td><%= line[:question] %></td>
-    <td><%= line[:reader_answer] %></td>
-    <td><%= line[:guesser_answer] %></td>
-    <td>
-      <% if line[:guesser_marked]%>
-      Yes
-      <% else %>
-      No
-      <% end %>
-    </td>
-  </tr>
-  <% end %>
+  <tbody>
+    <tr>
+      <td><%= line[:question] %></td>
+      <td><%= line[:reader_answer] %></td>
+      <td><%= line[:guesser_answer] %></td>
+      <td>
+        <% if line[:guesser_marked]%>
+        Yes
+        <% else %>
+        No
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
 </table>
+<% else %>
+<div class="panel panel-warning">
+  <div class="panel-body">
+    <center><h2> The whiteboard is empty. </h2></center>
+  </div>
+</div>
+<% end %>

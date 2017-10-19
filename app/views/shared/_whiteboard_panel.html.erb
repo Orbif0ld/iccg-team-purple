@@ -1,0 +1,13 @@
+<div class="container" id="whiteboard" style="cursor:pointer">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= render partial: "shared/whiteboard_head" %>
+      <center><h6 style="color:blue" id="wb_instruction">tap or hover to expand</h6></center>
+    </div>
+    <div class="panel-body">
+      <div class="container" id="whiteboard_body" hidden>
+        <%= render partial: "/shared/whiteboard_tail"%>
+      </div>
+    </div>
+  </div>
+</div>

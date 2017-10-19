@@ -1,0 +1,13 @@
+<div class="container" id="document" style="cursor:pointer">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= render partial: "/shared/document_title" %>
+      <center><h6 id="doc_instruction" style="color:blue">tap or hover to expand</h6></center>
+    </div>
+    <div class="panel-body">
+      <div class="container" id="document_body" hidden>
+        <%= render partial: "/shared/document_body"%>
+      </div>
+    </div>
+  </div>
+</div>

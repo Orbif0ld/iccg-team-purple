@@ -1,1 +1,44 @@
-Play as Reader here.
+<div class="container">
+  <div class="panel panel-default" id="question_form">
+    <div class="panel-body">
+      <div class="form-group" id="warning_cls">
+        <label for="question">Question:</label>
+        <input type="text" class="form-control" id="question">
+        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+      </div>
+      <center>
+        <button type="submit" class="btn btn-primary btn-lg">ask question</button>
+      </center>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-default" id="question_display" hidden>
+    <div class="panel-body">
+      <label>Question:</label><span id="question_text"></span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-default" id="answer_form" hidden>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="your_answer">Your answer:</label>
+        <input type="text" class="form-control" id="your_answer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-default" hidden>
+    <div class="panel-body">
+      <label>Guesser's answer:</lable> ...
+    </div>
+  </div>
+</div>
+
+<%= render partial: "/shared/whiteboard_panel" %>
+<%= render partial: "/shared/document_panel" %>

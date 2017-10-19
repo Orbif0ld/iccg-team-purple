@@ -67,7 +67,7 @@ var WhiteboardUi = function () {
     this.open = function () {
         hover = true;
         if (!toggled_on) {
-            $("#whiteboard_instruction").text("tap to keep open");
+            $("#wb_instruction").text("tap to keep open");
             show_whiteboard();
         };
     };
