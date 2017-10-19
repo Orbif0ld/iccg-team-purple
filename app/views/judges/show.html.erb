@@ -18,11 +18,10 @@
 <div class="container" id="whiteboard">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h2>Whiteboard</h2>
-      <center><h6 style="color:blue">(more)</h6></center>
+      <%= render partial: "shared/whiteboard_head" %>
+      <center><h6 style="color:blue" id="wb_instruction">tap or hover to expand</h6></center>
     </div>
     <div class="panel-body">
-      <%= render partial: "shared/whiteboard_head" %>
       <div class="container" id="whiteboard_body" hidden>
         <%= render partial: "/shared/whiteboard_tail"%>
       </div>
@@ -33,12 +32,12 @@
 <div class="container" id="document">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h2>Document</h2>
-      <center><h6 style="color:blue">(more)</h6></center>
+      <%= render partial: "/shared/document_title" %>
+      <center><h6 id="doc_instruction" style="color:blue">tap or hover to expand</h6></center>
     </div>
     <div class="panel-body">
       <div class="container" id="document_body" hidden>
-        <%= render partial: "/shared/document"%>
+        <%= render partial: "/shared/document_body"%>
       </div>
     </div>
   </div>
