@@ -1,3 +1,12 @@
+// Strategy:
+// Capitalized functions represent abstract data types for ui elements
+// for document, whiteboard, question and answers. Their methods cause the
+// appropriate manipulations in the DOM.
+// Event listeners connect various user inputs to these methods.
+// The server is regularly polled for new data, and the ADTs' methods are
+// called to update the view.
+
+// Represents the horizontal, collapsable document panel.
 var DocumentUi = function () {
 
     var toggled_on = false;
@@ -57,6 +66,7 @@ var DocumentUi = function () {
     };
 };
 
+// Represents the horizontal, collapsable whiteboard panel.
 var WhiteboardUi = function () {
 
     var toggled_on = false;
@@ -116,27 +126,65 @@ var WhiteboardUi = function () {
     };
 };
 
+// Represents question and answer input and displays.
 var RoundUi = function () {
 
-    var question_available = false;
-    var is_questioner = false;
-    var reader_answer_available = false;
-    var guesser_answer_available = false;
-    var question_warning = false;
+    var is_questioner;
+
+    this.new_round = function (is_q) {
+        is_questioner = is_q;
+        clear_all();
+        hide_question();
+        hide_answers();
+        if (is_questioner) {
+            show_question_form();
+        } else {
+            hide_question_form();
+        };
+    };
 
     this.try_question = function () {
-        var question = $("#question")[0].value
+        var question = $("#question")[0].value;
         if (valid(question)) {
             question_warning_off();
             hide_question_form();
             set_question(question);
             show_question();
-            question_available = true;
             show_answer_form();
             return question;
         } else {
             question_warning_on();
             return false;
+        };
+    };
+
+    this.try_answer = function () {
+        var answer = $("#answer")[0].value
+        if (valid(answer)) {
+            answer_warning_off();
+            hide_answer_form();
+            set_reader_answer(answer);
+            show_answers();
+            return answer;
+        } else {
+            answer_warning_on();
+            return false;
+        };
+    };
+
+    this.set_reader_answer = function (answer) {
+        set_reader_answer(answer);
+    };
+
+    this.set_guesser_answer = function (answer) {
+        set_guesser_answer(answer);
+    };
+
+    this.set_question = function (question) {
+        set_question(question);
+        if (!is_questioner) {
+            show_question();
+            show_answer_form();
         };
     };
 
@@ -162,6 +210,14 @@ var RoundUi = function () {
         $("#question_display").hide();
     };
 
+    var show_answers = function () {
+        $("#answers_display").show();
+    };
+
+    var hide_answers = function () {
+        $("#answers_display").hide();
+    };
+
     var show_answer_form = function () {
         $("#answer_form").show();
     };
@@ -171,15 +227,39 @@ var RoundUi = function () {
     };
 
     var question_warning_on = function() {
-        $("#warning_cls")[0].className = "form-group has-warning has-feedback";
+        $("#warning_q")[0].className = "form-group has-warning has-feedback";
     };
 
     var question_warning_off = function () {
-        $("#warning_cls")[0].className = "form-group";
+        $("#warning_q")[0].className = "form-group";
     };
 
     var set_question = function (question) {
         $("#question_text").text(" " + question);
+    };
+
+    var answer_warning_on = function() {
+        $("#warning_a")[0].className = "form-group has-warning has-feedback";
+    };
+
+    var answer_warning_off = function () {
+        $("#warning_a")[0].className = "form-group";
+    };
+
+    var set_reader_answer = function (answer) {
+        $("#reader_answer_text").text(answer);
+    };
+
+    var set_guesser_answer = function (answer) {
+        $("#guesser_answer_text").text(answer);
+    };
+
+    var clear_all = function () {
+        $("#question")[0].value = "";
+        $("#answer")[0].value = "";
+        set_question("");
+        set_reader_answer("...");
+        set_guesser_answer("...");
     };
         
 };
@@ -212,13 +292,6 @@ var add_listeners = function () {
     $("#document").click(function() {
         doc_ui.toggle();
     });
-};
-
-var question = function (data) {
-
-    if (!data.question_available) {
-        
-    };
 };
 
 var do_all = function () {

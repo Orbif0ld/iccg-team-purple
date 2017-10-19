@@ -1,13 +1,13 @@
 <div class="container">
-  <div class="panel panel-default" id="question_form">
+  <div class="panel panel-default" id="question_form" hidden>
     <div class="panel-body">
-      <div class="form-group" id="warning_cls">
+      <div class="form-group" id="warning_q">
         <label for="question">Question:</label>
         <input type="text" class="form-control" id="question">
         <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
       </div>
       <center>
-        <button type="submit" class="btn btn-primary btn-lg">ask question</button>
+        <button type="button" class="btn btn-primary btn-lg">ask question</button>
       </center>
     </div>
   </div>
@@ -16,7 +16,7 @@
 <div class="container">
   <div class="panel panel-default" id="question_display" hidden>
     <div class="panel-body">
-      <label>Question:</label><span id="question_text"></span>
+      <label>Question:</label><p id="question_text"></p>
     </div>
   </div>
 </div>
@@ -24,21 +24,38 @@
 <div class="container">
   <div class="panel panel-default" id="answer_form" hidden>
     <div class="panel-body">
-      <div class="form-group">
-        <label for="your_answer">Your answer:</label>
-        <input type="text" class="form-control" id="your_answer">
+      <div class="form-group" id="warning_a">
+        <label for="answer">Answer:</label>
+        <input type="text" class="form-control" id="answer">
+        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
       </div>
+      <center>
+        <button type="button" class="btn btn-primary btn-lg">submit answer</button>
+      </center>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <div class="panel panel-default" hidden>
+  <div class="panel panel-default" id="answers_display" hidden>
     <div class="panel-body">
-      <label>Guesser's answer:</lable> ...
+      <div class"container">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <label>Reader's answer:</label><p id="reader_answer_text">...</p>
+          </div>
+        </div>
+      </div>
+      <div class"container">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <label>Guesser's answer:</label><p id="guesser_answer_text">...</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<%= render partial: "/shared/whiteboard_panel" %>
 <%= render partial: "/shared/document_panel" %>
+<%= render partial: "/shared/whiteboard_panel" %>
