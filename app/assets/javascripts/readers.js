@@ -126,51 +126,104 @@ var WhiteboardUi = function () {
     };
 };
 
-// Represents question and answer input and displays.
+// Manipualtes question and answer input and displays.
+// This class ensures that incorrect sequences of class method calls
+// cannot result in an illegal interface configuration.
+// Example illegal configuration: displaying the answer form but not the question.
+// If class methods are called from the wrong state they will not change the DOM and
+// display a message in the log.
 var RoundUi = function () {
 
-    var is_questioner;
+    var state = "game_start";
+    var states = ["await_question", "ask_question", "answer", "review", "game_start"];
 
-    this.new_round = function (is_q) {
-        is_questioner = is_q;
-        clear_all();
-        hide_question();
-        hide_answers();
-        if (is_questioner) {
-            show_question_form();
+    // the following methods change the visibilty of UI elements and cause state transitions.
+    
+    // should be called at the start of each round
+    // param is_questioner: a boolean indicating whether the viewer get to ask a question during this round
+    // makes the apporpriate elements visible in the DOM
+    this.new_round = function (is_questioner) {
+        if (state === "game_start" || state === "review") {
+            state = is_questioner ? "ask_question" : "await_question";
+            clear_all();
+            hide_question();
+            hide_answers();
+            if (is_questioner) {
+                show_question_form();
+            } else {
+                hide_question_form();
+            };
         } else {
-            hide_question_form();
+            console.log("new_round should not be called in state " + state);
         };
     };
 
+    // Attempts submission of the question from the appropriate form.
+    // A question is considered valid if it is not solely composed of whitespace characters.
+    // If the question is valid, manipualtes the DOM to make the next stage of the game available.
+    // Else, manipulates the DOM to indicate the invalidity of the input.
     this.try_question = function () {
-        var question = $("#question")[0].value;
-        if (valid(question)) {
-            question_warning_off();
-            hide_question_form();
-            set_question(question);
-            show_question();
-            show_answer_form();
-            return question;
+        if (state === "ask_question") {
+            var question = $("#question")[0].value;
+            if (valid(question)) {
+                state = "answer";
+                question_warning_off();
+                hide_question_form();
+                set_question(question);
+                show_question();
+                show_answer_form();
+                return question;
+            } else {
+                question_warning_on();
+                return false;
+            };
         } else {
-            question_warning_on();
-            return false;
+            console.log("try_question should not be called in state " + state);
         };
     };
 
+    // Attempts submission of the answer from the appropriate form.
+    // An answer is considered valid if it is not solely composed of whitespace characters.
+    // If the answer is valid, manipualtes the DOM to make the next stage of the game available.
+    // Else manipulates the DOM to indicate the invalidity of the input.
     this.try_answer = function () {
-        var answer = $("#answer")[0].value
-        if (valid(answer)) {
-            answer_warning_off();
-            hide_answer_form();
-            set_reader_answer(answer);
-            show_answers();
-            return answer;
+        if (state === "answer") {
+            var answer = $("#answer")[0].value
+            if (valid(answer)) {
+                state = "review";
+                answer_warning_off();
+                hide_answer_form();
+                set_reader_answer(answer);
+                show_answers();
+                return answer;
+            } else {
+                answer_warning_on();
+                return false;
+            };
         } else {
-            answer_warning_on();
-            return false;
+           console.log("try_answer should not be called in state " + state); 
         };
     };
+
+    // Sets a question without checking validity; the assumption is that the question was submitted
+    // by another player and has arrived via the server. Manipualtes the DOM to make the next stage
+    // of the game available.
+    // param question: a string repersenting the question
+    this.set_question = function (question) {
+        if (state === "await_question") {
+            state = "answer";
+            set_question(question);
+            if (!is_questioner) {
+                show_question();
+                show_answer_form();
+            };
+        } else {
+            console.log("set_question should not be called in state " + state); 
+        };
+    };
+
+    // the following methods do not change the visiblity if any elements
+    // and do not cause state transitions.
 
     this.set_reader_answer = function (answer) {
         set_reader_answer(answer);
@@ -178,14 +231,6 @@ var RoundUi = function () {
 
     this.set_guesser_answer = function (answer) {
         set_guesser_answer(answer);
-    };
-
-    this.set_question = function (question) {
-        set_question(question);
-        if (!is_questioner) {
-            show_question();
-            show_answer_form();
-        };
     };
 
     //////////////////// helpers ////////////////////
