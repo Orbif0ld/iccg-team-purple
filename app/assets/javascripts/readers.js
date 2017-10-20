@@ -135,21 +135,50 @@ var WhiteboardUi = function () {
 var RoundUi = function () {
 
     var state = "game_start";
+    var guesser_answer = false;
+    var reader_answer = false;
+    var is_questioner;
     var states = ["await_question", "ask_question", "answer", "review", "game_start"];
 
+    this.no_round_set = function () {
+        return (state === "review" || state === "game_start");
+    };
+    
+    this.no_question = function () {
+        return (state === "await_question");
+    };
+
+    this.no_reader_answer = function () {
+        return reader_answer;
+    };
+    
+    this.no_guesser_answer = function () {
+        return guesser_answer;
+    };
+    
     // the following methods change the visibilty of UI elements and cause state transitions.
     
     // should be called at the start of each round
     // param is_questioner: a boolean indicating whether the viewer get to ask a question during this round
     // makes the apporpriate elements visible in the DOM
-    this.new_round = function (is_questioner) {
+    this.new_round = function (is_q) {
         if (state === "game_start" || state === "review") {
+            is_questioner = is_q;
+            guesser_answer = false;
             state = is_questioner ? "ask_question" : "await_question";
             clear_all();
             hide_question();
             hide_answers();
             if (is_questioner) {
                 show_question_form();
+                $("#ask_btn").on ("click", function() {
+                    console.log("ask button triggered");
+                    var question = round_ui.try_question();
+                    console.log("question is: " + question);
+                    if (question != false) {
+                        $.post($("#info").data("submit_question"), {question: question}, function () {console.log("question sent")});
+                    };
+                });
             } else {
                 hide_question_form();
             };
@@ -172,6 +201,7 @@ var RoundUi = function () {
                 set_question(question);
                 show_question();
                 show_answer_form();
+                answ_btn_listen();
                 return question;
             } else {
                 question_warning_on();
@@ -216,20 +246,23 @@ var RoundUi = function () {
             if (!is_questioner) {
                 show_question();
                 show_answer_form();
+                answ_btn_listen();
             };
         } else {
             console.log("set_question should not be called in state " + state); 
         };
     };
 
-    // the following methods do not change the visiblity if any elements
+    // the following methods do not change the visiblity of any elements
     // and do not cause state transitions.
 
     this.set_reader_answer = function (answer) {
+        reader_answer = true;
         set_reader_answer(answer);
     };
 
     this.set_guesser_answer = function (answer) {
+        guesser_answer = true;
         set_guesser_answer(answer);
     };
 
@@ -299,6 +332,12 @@ var RoundUi = function () {
         $("#guesser_answer_text").text(answer);
     };
 
+    var answ_btn_listen = function () {
+        $("#answer_btn").on("click", function() {
+            round_ui.try_answer();
+        });
+    };
+
     var clear_all = function () {
         $("#question")[0].value = "";
         $("#answer")[0].value = "";
@@ -341,6 +380,20 @@ var add_listeners = function () {
 
 var do_all = function () {
     add_listeners();
+
+    setInterval(function () {
+        $.getJSON($("#info").data("source"), function (data) {
+            if (!data.question_available && round_ui.no_round_set()) {
+                round_ui.new_round(data.is_questioner);
+            } else if (data.question_available && round_ui.no_question()) {
+                round_ui.set_question(data.question);
+            } else if (data.guesser_answer != null && round_ui.no_guesser_answer()) {
+                round_ui.set_question(data.guesser_answer);
+            } else if (data.game_over) {
+                console.log("game over");
+            };
+        });
+    }, 1000);
 };
 
 $(do_all);
