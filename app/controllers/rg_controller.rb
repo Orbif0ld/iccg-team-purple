@@ -4,8 +4,8 @@ class RgController < ApplicationController
     question = if @player.question_available? then @player.get_question else "" end
     this_answer = if @player.is_reader? then @player.get_readers_answer else @player.get_guessers_answer end
     other_answer = if @player.is_reader? then @player.get_guessers_answer else @player.get_readers_answer end
-    requires_answer = if (this_answer == "" and question != "") then true else false end
-    reviewing = if (this_answer != "") then true else false end
+    requires_answer = if (this_answer.nil? and question != "") then true else false end
+    reviewing = if (!this_answer.nil?) then true else false end
     
     round_data = {is_questioner: @player.is_questioner?,
                   new_round: @player.new_round?,

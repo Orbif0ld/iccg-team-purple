@@ -1,3 +1,4 @@
+
 class GuessersController < RgController
   before_action :get_guesser
 

@@ -1,3 +1,4 @@
+
 <div class="container">
   <div class="panel panel-default" id="question_form" hidden>
     <div class="panel-body">
@@ -42,14 +43,14 @@
       <div class"container">
         <div class="panel panel-default">
           <div class="panel-body">
-            <label>Reader's answer:</label><p id="reader_answer_text">...</p>
+            <label>Your answer:</label><p id="this_answer_text">...</p>
           </div>
         </div>
       </div>
       <div class"container">
         <div class="panel panel-default">
           <div class="panel-body">
-            <label>Guesser's answer:</label><p id="guesser_answer_text">...</p>
+            <label>Other player's answer:</label><p id="other_answer_text">...</p>
           </div>
         </div>
       </div>
@@ -58,4 +59,4 @@
 </div>
 
 <%= render partial: "/shared/whiteboard_panel" %>
-<div id="info" data-source=<%= get_round_data_game_guesser_path(params[:game_id], params[:id]) %> data-submit_question=<%= submit_question_game_guesser_path(params[:game_id], params[:id])%> data-submit_answer=<%= submit_answer_game_guesser_path(params[:game_id], params[:id])%> </div>
+<div id="info" data-source=<%= get_round_data_game_guesser_path(params[:game_id], params[:id]) %> data-submit_question=<%= submit_question_game_guesser_path(params[:game_id], params[:id])%> data-submit_answer=<%= submit_answer_game_guesser_path(params[:game_id], params[:id])%> data-role="guesser"</div>
