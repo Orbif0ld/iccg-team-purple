@@ -1,5 +1,17 @@
 class Guesser < ApplicationRecord
   belongs_to :game
+
+  def is_reader?
+    return false;
+  end
+
+  def is_guesser?
+    return true;
+  end
+
+  def is_judge?
+    return false;
+  end
   
   ################### OBSERVERS  ####################
   

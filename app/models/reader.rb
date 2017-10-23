@@ -1,6 +1,18 @@
 class Reader < ApplicationRecord
   belongs_to :game
 
+  def is_reader?
+    return true;
+  end
+
+  def is_guesser?
+    return false;
+  end
+
+  def is_judge?
+    return false;
+  end
+
 ################### OBSERVERS  ####################
 
   # Ask whether this reader asks the question during this round.

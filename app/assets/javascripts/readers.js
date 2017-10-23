@@ -127,89 +127,64 @@ var WhiteboardUi = function () {
 };
 
 // Manipualtes question and answer input and displays.
-// This class ensures that incorrect sequences of class method calls
-// cannot result in an illegal interface configuration.
-// Example illegal configuration: displaying the answer form but not the question.
-// If class methods are called from the wrong state they will not change the DOM and
-// display a message in the log.
 var RoundUi = function () {
 
-    var state = "game_start";
-    var guesser_answer = false;
-    var reader_answer = false;
-    var is_questioner;
-    var states = ["await_question", "ask_question", "answer", "review", "game_start"];
+    var displays = "nothing";
 
-    this.no_round_set = function () {
-        return (state === "review" || state === "game_start");
-    };
-    
-    this.no_question = function () {
-        return (state === "await_question");
+    this.clear = function() {
+        dsiplays = "nothing";
+        hide_all();
+        clear_all();
     };
 
-    this.no_reader_answer = function () {
-        return reader_answer;
+    this.populate = function(data) {
+        set_question(data.question);
+        var role = get_role();
+        var this_answer = (data.this_answer != null) ? data.this_answer : "...";
+        var other_answer = (data.other_answer != null) ? data.other_answer : "...";
+        set_this_answer(this_answer);
+        set_other_answer(other_answer);
     };
     
-    this.no_guesser_answer = function () {
-        return guesser_answer;
+    this.show_waiting_for_question = function () {
+        displays = "waiting for question";
+        clear_all();
+        hide_all();
     };
-    
-    // the following methods change the visibilty of UI elements and cause state transitions.
-    
-    // should be called at the start of each round
-    // param is_questioner: a boolean indicating whether the viewer get to ask a question during this round
-    // makes the apporpriate elements visible in the DOM
-    this.new_round = function (is_q) {
-        if (state === "game_start" || state === "review") {
-            is_questioner = is_q;
-            guesser_answer = false;
-            state = is_questioner ? "ask_question" : "await_question";
-            clear_all();
-            hide_question();
-            hide_answers();
-            if (is_questioner) {
-                show_question_form();
-                $("#ask_btn").on ("click", function() {
-                    console.log("ask button triggered");
-                    var question = round_ui.try_question();
-                    console.log("question is: " + question);
-                    if (question != false) {
-                        $.post($("#info").data("submit_question"), {question: question}, function () {console.log("question sent")});
-                    };
-                });
-            } else {
-                hide_question_form();
-            };
-        } else {
-            console.log("new_round should not be called in state " + state);
-        };
+
+    this.show_question_form = function () {
+        displays = "question form";
+        clear_all();
+        hide_all();
+        show_question_form();
+        ask_btn_listen();
     };
 
     // Attempts submission of the question from the appropriate form.
     // A question is considered valid if it is not solely composed of whitespace characters.
-    // If the question is valid, manipualtes the DOM to make the next stage of the game available.
-    // Else, manipulates the DOM to indicate the invalidity of the input.
     this.try_question = function () {
-        if (state === "ask_question") {
-            var question = $("#question")[0].value;
-            if (valid(question)) {
-                state = "answer";
-                question_warning_off();
-                hide_question_form();
-                set_question(question);
-                show_question();
-                show_answer_form();
-                answ_btn_listen();
-                return question;
-            } else {
-                question_warning_on();
-                return false;
-            };
+        var question = $("#question")[0].value;
+        if (valid(question)) {
+            displays = "answer form";
+            question_warning_off();
+            set_question(question);
+            hide_all();
+            show_question();
+            show_answer_form();
+            answ_btn_listen();
+            return question;
         } else {
-            console.log("try_question should not be called in state " + state);
+            question_warning_on();
+            return false;
         };
+    };
+
+    this.show_answer_form = function () {
+        displays = "answer form";
+        hide_all();
+        show_question();
+        show_answer_form();
+        answ_btn_listen();
     };
 
     // Attempts submission of the answer from the appropriate form.
@@ -217,56 +192,60 @@ var RoundUi = function () {
     // If the answer is valid, manipualtes the DOM to make the next stage of the game available.
     // Else manipulates the DOM to indicate the invalidity of the input.
     this.try_answer = function () {
-        if (state === "answer") {
-            var answer = $("#answer")[0].value
-            if (valid(answer)) {
-                state = "review";
-                answer_warning_off();
-                hide_answer_form();
-                set_reader_answer(answer);
-                show_answers();
-                return answer;
-            } else {
-                answer_warning_on();
-                return false;
-            };
+        var answer = $("#answer")[0].value
+        if (valid(answer)) {
+            displays = "review";
+            answer_warning_off();
+            set_this_answer(answer);
+            hide_all();
+            show_question();
+            show_answers();
+            return answer;
         } else {
-           console.log("try_answer should not be called in state " + state); 
+            answer_warning_on();
+            return false;
         };
     };
 
-    // Sets a question without checking validity; the assumption is that the question was submitted
-    // by another player and has arrived via the server. Manipualtes the DOM to make the next stage
-    // of the game available.
-    // param question: a string repersenting the question
+    this.show_review = function () {
+        displays = "review";
+        hide_all();
+        show_question();
+        show_answers();
+    };
+
+    this.set_other_answer = function (answer) {
+        set_other_answer(answer);
+    };
+
     this.set_question = function (question) {
-        if (state === "await_question") {
-            state = "answer";
-            set_question(question);
-            if (!is_questioner) {
-                show_question();
-                show_answer_form();
-                answ_btn_listen();
-            };
-        } else {
-            console.log("set_question should not be called in state " + state); 
-        };
+        set_question(question);
     };
 
-    // the following methods do not change the visiblity of any elements
-    // and do not cause state transitions.
-
-    this.set_reader_answer = function (answer) {
-        reader_answer = true;
-        set_reader_answer(answer);
+    this.displays_what = function () {
+        return displays;
     };
 
-    this.set_guesser_answer = function (answer) {
-        guesser_answer = true;
-        set_guesser_answer(answer);
+    this.displays = function (description) {
+        return (displays === description);
+    }
+
+    this.does_not_display = function (description) {
+        return !(displays === description);
     };
 
     //////////////////// helpers ////////////////////
+
+    var get_role = function() {
+        return $("#info").data("role");
+    };
+
+    var hide_all = function() {
+        hide_question_form();
+        hide_question();
+        hide_answer_form();
+        hide_answers();
+    };
 
     var valid = function (input) {
         return (input.replace(/\s/g, '').length > 0)
@@ -324,17 +303,33 @@ var RoundUi = function () {
         $("#warning_a")[0].className = "form-group";
     };
 
-    var set_reader_answer = function (answer) {
-        $("#reader_answer_text").text(answer);
+    var set_this_answer = function (answer) {
+        $("#this_answer_text").text(answer);
     };
 
-    var set_guesser_answer = function (answer) {
-        $("#guesser_answer_text").text(answer);
+    var set_other_answer = function (answer) {
+        $("#other_answer_text").text(answer);
+    };
+
+    var ask_btn_listen = function () {
+        $("#ask_btn").on ("click", function() {
+            console.log("ask button triggered");
+            var question = round_ui.try_question();
+            console.log("question is: " + question);
+            if (question != false) {
+                $.post($("#info").data("submit_question"), {question: question}, function () {console.log("question sent")});
+            };
+        });
     };
 
     var answ_btn_listen = function () {
         $("#answer_btn").on("click", function() {
-            round_ui.try_answer();
+            console.log("answer button triggered");
+            var answer = round_ui.try_answer();
+            console.log("answer is: " + answer);
+            if (answer != false) {
+                $.post($("#info").data("submit_answer"), {answer: answer}, function () {console.log("answer sent")});
+            };
         });
     };
 
@@ -342,8 +337,8 @@ var RoundUi = function () {
         $("#question")[0].value = "";
         $("#answer")[0].value = "";
         set_question("");
-        set_reader_answer("...");
-        set_guesser_answer("...");
+        set_this_answer("...");
+        set_other_answer("...");
     };
         
 };
@@ -378,19 +373,53 @@ var add_listeners = function () {
     });
 };
 
+var same = function (reference, data) {
+    var keys = Object.keys(reference);
+    for (var i in keys) {
+        var p = keys[i];
+        if (reference.hasOwnProperty(p)) {
+            //console.log("reference[" + p + "] = " + reference[p]);
+            //console.log("data[" + p + "] = " + data[p]);
+            if (reference[p] != data[p]) {
+                //console.log("does not match!");
+                return false;
+            };
+        };
+    };
+    return true;
+};
+
+// var data = {o: 1, p: 2};
+// var data_false = {o: 1, p: 3};
+// var empty = {};
+// var reference = {o: 1, p: 2};
+
+var data = {};
+
 var do_all = function () {
     add_listeners();
 
+    $.get($("#info").data("source"), function(d) {data = d;});
+
     setInterval(function () {
-        $.getJSON($("#info").data("source"), function (data) {
-            if (!data.question_available && round_ui.no_round_set()) {
-                round_ui.new_round(data.is_questioner);
-            } else if (data.question_available && round_ui.no_question()) {
-                round_ui.set_question(data.question);
-            } else if (data.guesser_answer != null && round_ui.no_guesser_answer()) {
-                round_ui.set_question(data.guesser_answer);
-            } else if (data.game_over) {
-                console.log("game over");
+        $.getJSON($("#info").data("source"), function (new_data) {
+            if (same(data, new_data)) {
+                return;
+            } else {
+                data = new_data;
+                round_ui.populate(data);
+            };
+            
+            if (data.new_round && (round_ui.does_not_displays("waiting for question") || round_ui.does_not_display("question form"))) {
+                if (data.is_questioner) {
+                    round_ui.show_question_form();
+                } else {
+                    round_ui.show_waiting_for_question();
+                };
+            } else if (data.requires_answer && round_ui.does_not_display("answer form")) {
+                round_ui.show_answer_form();
+            } else if (data.reviewing && round_ui.does_not_display("review")) {
+                round_ui.show_review();
             };
         });
     }, 1000);

@@ -1,6 +1,18 @@
 class Judge < ApplicationRecord
   belongs_to :game
 
+  def is_reader?
+    return false;
+  end
+
+  def is_guesser?
+    return false;
+  end
+
+  def is_judge?
+    return true;
+  end
+
   #################### OBSERVERS ####################
 
   # Ask if a new round just started.
