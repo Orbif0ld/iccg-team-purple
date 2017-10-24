@@ -2,6 +2,9 @@ var wb_ui = new WhiteboardUi();
 var round_ui = new RoundUi();
 
 var add_listeners = function () {
+
+    if ($("#info").data("role") != "guesser") {return;};
+    
     // show full whiteboard on hover
     $("#whiteboard").hover(function() {
         wb_ui.open();
@@ -33,21 +36,17 @@ var same = function (reference, data) {
 
 var data = {};
 
-var do_all = function () {
-    add_listeners();
+var add_poll = function () {
 
-    $.get($("#info").data("source"), function(d) {data = d;});
+    if ($("#info").data("role") != "guesser") {return;};
 
     setInterval(function () {
         $.getJSON($("#info").data("source"), function (new_data) {
-            if (same(data, new_data)) {
-                return;
-            } else {
-                data = new_data;
-                round_ui.populate(data);
-            };
+            data = new_data;
+            round_ui.populate(data);
             
-            if (data.new_round && (round_ui.does_not_displays("waiting for question") || round_ui.does_not_display("question form"))) {
+            if (data.new_round && (round_ui.does_not_display("waiting for question") &&
+                                   round_ui.does_not_display("question form"))) {
                 if (data.is_questioner) {
                     round_ui.show_question_form();
                 } else {
@@ -62,4 +61,5 @@ var do_all = function () {
     }, 1000);
 };
 
-$(do_all);
+$(add_listeners);
+$(add_poll);

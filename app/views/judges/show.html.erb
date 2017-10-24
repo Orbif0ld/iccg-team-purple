@@ -1,19 +1,37 @@
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-body">
-      Question: ...
+      <label>Question</label><p id="question_text"></p>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <div class="panel panel-default">
+  <div class="panel panel-default" id="answers_panel" hidden>
+    <div class="panel-heading">
+      <h6>
+        <p>
+          Select whichever answer suggests more strongly that the author is in possession of
+          "<%= @document.title %>".
+        </p>
+      </h6>
+    </div>
     <div class="panel-body">
-      <p>Answer 1: ...</p>
-      <p>Answer 2: ...</p>
+      <div class="panel panel-default">
+        <div id="answer1_panel" class="panel-body" style="cursor:pointer;">
+          <label>Answer 1</label><p id="answer1_text"></p>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div id="answer2_panel" class="panel-body" style="cursor:pointer;">
+          <label>Answer 2</label><p id="answer2_text"></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<%= render partial: "/shared/whiteboard_panel" %>
 <%= render partial: "/shared/document_panel" %>
+<%= render partial: "/shared/whiteboard_panel" %>
+
+<div id="info" data-source=<%= get_round_data_game_judge_path(params[:game_id], params[:id]) %> data-target=<%= select_better_answer_game_judge_path(params[:game_id], params[:id])%> data-role="judge"></div>

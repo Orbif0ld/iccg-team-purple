@@ -12,6 +12,7 @@ class JudgesController < ApplicationController
     answers = if @player.answers_available? then @player.get_answers else nil end
     round_data = {new_round: @player.new_round?,
                   question_available: @player.question_available?,
+                  game_over: @player.is_game_over,
                   question: question,
                   answers_available: @player.answers_available?,
                   answers: answers,
