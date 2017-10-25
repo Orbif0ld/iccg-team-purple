@@ -1,4 +1,14 @@
 class RgController < ApplicationController
+
+  def refresh_whiteboard_head
+    @whiteboard = @player.get_whiteboard_hashes
+    render partial: "shared/whiteboard_head"
+  end
+
+  def refresh_whiteboard_tail
+    @whiteboard = @player.get_whiteboard_hashes
+    render partial: "shared/whiteboard_tail"
+  end
   
   def get_round_data
     question = if @player.question_available? then @player.get_question else "" end

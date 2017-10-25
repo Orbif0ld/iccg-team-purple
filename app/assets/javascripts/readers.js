@@ -73,6 +73,8 @@ var add_poll = function () {
             
             if (data.new_round && (round_ui.does_not_display("waiting for question") &&
                                    round_ui.does_not_display("question form"))) {
+                $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
+                $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
                 if (data.is_questioner) {
                     round_ui.show_question_form();
                 } else {
@@ -82,6 +84,8 @@ var add_poll = function () {
                 round_ui.show_answer_form();
             } else if (data.reviewing && round_ui.does_not_display("review")) {
                 round_ui.show_review();
+            } else if (data.game_over) {
+                console.log("game is over");
             };
         });
     }, 1000);

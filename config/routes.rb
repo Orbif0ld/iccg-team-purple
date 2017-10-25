@@ -42,8 +42,6 @@ Rails.application.routes.draw do
     resources :whiteboards
   end
 
-  #  Add additional routes to the seven routes created by resources
-
   resource :sync_games_managers do
     get "general_activity"
     get "user_activity"
@@ -64,6 +62,8 @@ Rails.application.routes.draw do
         get 'show'
         get 'get_round_data'
         get 'get_document_data'
+        get 'refresh_whiteboard_head'
+        get 'refresh_whiteboard_tail'
         post 'submit_question'
         post 'submit_answer'
       end
@@ -72,6 +72,8 @@ Rails.application.routes.draw do
       member do
         get 'show'
         get 'get_round_data'
+        get 'refresh_whiteboard_head'
+        get 'refresh_whiteboard_tail'
         post 'submit_question'
         post 'submit_answer'
       end
@@ -81,6 +83,8 @@ Rails.application.routes.draw do
         get 'show'
         get 'get_round_data'
         get 'get_document_data'
+        get 'refresh_whiteboard_head'
+        get 'refresh_whiteboard_tail'
         post 'select_better_answer'
       end
     end

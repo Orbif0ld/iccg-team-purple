@@ -1,63 +1,13 @@
 
-<div class="container">
-  <div class="panel panel-default" id="question_form" hidden>
-    <div class="panel-body">
-      <div class="form-group" id="warning_q">
-        <label for="question">Question:</label>
-        <input type="text" class="form-control" id="question">
-        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
-      </div>
-      <center>
-        <button type="button" class="btn btn-primary btn-lg" id="ask_btn">ask question</button>
-      </center>
-    </div>
-  </div>
-</div>
 
-<div class="container">
-  <div class="panel panel-default" id="question_display" hidden>
-    <div class="panel-body">
-      <label>Question:</label><p id="question_text"></p>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="panel panel-default" id="answer_form" hidden>
-    <div class="panel-body">
-      <div class="form-group" id="warning_a">
-        <label for="answer">Answer:</label>
-        <input type="text" class="form-control" id="answer">
-        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
-      </div>
-      <center>
-        <button type="button" class="btn btn-primary btn-lg" id="answer_btn">submit answer</button>
-      </center>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="panel panel-default" id="answers_display" hidden>
-    <div class="panel-body">
-      <div class"container">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <label>Your answer:</label><p id="this_answer_text">...</p>
-          </div>
-        </div>
-      </div>
-      <div class"container">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <label>Other player's answer:</label><p id="other_answer_text">...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<%= render partial: "/shared/qAndA" %>
 <%= render partial: "/shared/document_panel" %>
 <%= render partial: "/shared/whiteboard_panel" %>
-<div id="info" data-source=<%= get_round_data_game_reader_path(params[:game_id], params[:id]) %> data-submit_question=<%= submit_question_game_reader_path(params[:game_id], params[:id])%> data-submit_answer=<%= submit_answer_game_reader_path(params[:game_id], params[:id])%> data-role="reader"</div>
+<div id="info" data-source=<%= get_round_data_game_reader_path(params[:game_id], params[:id]) %>
+     data-submit_question=<%= submit_question_game_reader_path(params[:game_id], params[:id])%>
+     data-submit_answer=<%= submit_answer_game_reader_path(params[:game_id], params[:id])%>
+     data-role="reader"
+     data-wb_head_refresh_path=<%= refresh_whiteboard_head_game_reader_path(params[:game_id], params[:id])%>
+     data-wb_tail_refresh_path=<%= refresh_whiteboard_tail_game_reader_path(params[:game_id], params[:id])%>
+     >
+</div>

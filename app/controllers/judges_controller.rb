@@ -2,6 +2,16 @@ class JudgesController < ApplicationController
 
   before_action :get_judge
 
+  def refresh_whiteboard_head
+    @whiteboard = @player.get_whiteboard_hashes
+    render partial: "shared/whiteboard_head"
+  end
+
+  def refresh_whiteboard_tail
+    @whiteboard = @player.get_whiteboard_hashes
+    render partial: "shared/whiteboard_tail"
+  end
+
   def show
     @whiteboard = @player.get_whiteboard_hashes
     @document = @player.game.document

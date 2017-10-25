@@ -34,4 +34,10 @@
 <%= render partial: "/shared/document_panel" %>
 <%= render partial: "/shared/whiteboard_panel" %>
 
-<div id="info" data-source=<%= get_round_data_game_judge_path(params[:game_id], params[:id]) %> data-target=<%= select_better_answer_game_judge_path(params[:game_id], params[:id])%> data-role="judge"></div>
+<div id="info" data-source=<%= get_round_data_game_judge_path(params[:game_id], params[:id]) %>
+     data-target=<%= select_better_answer_game_judge_path(params[:game_id], params[:id])%>
+     data-role="judge"
+     data-wb_head_refresh_path=<%= refresh_whiteboard_head_game_judge_path(params[:game_id], params[:id])%>
+     data-wb_tail_refresh_path=<%= refresh_whiteboard_tail_game_judge_path(params[:game_id], params[:id])%>
+     >
+</div>

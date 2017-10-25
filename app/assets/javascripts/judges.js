@@ -195,6 +195,9 @@ var add_poll = function () {
                        judge_ui.does_not_display("judgement")) {
                 answers.set(data.answers);
                 judge_ui.show_judgement();
+            } else if (judge_ui.displays("waiting for question")) {
+                $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
+                $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
             } else if (data.game_over) {
                 console.log("game is over");
             };
