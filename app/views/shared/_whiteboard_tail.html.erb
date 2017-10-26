@@ -1,5 +1,7 @@
 <table class="table table-striped table-bordered table-responsive whiteboard-scroll">
-  <% @whiteboard.reverse[1, @whiteboard.size].each do |line| %>
+  <% whiteboard_tail = @whiteboard.reverse[1, @whiteboard.size] %>
+  <% whiteboard_tail ||= []; %>
+  <% whiteboard_tail.each do |line| %>
   <tr>
     <td><%= line[:question] %></td>
     <td><%= line[:reader_answer] %></td>

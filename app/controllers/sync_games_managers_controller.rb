@@ -50,7 +50,7 @@ class SyncGamesManagersController < ApplicationController
   def send_to_game
     if @sgm.game_started_for current_user
       role = @sgm.playing_as current_user
-      game = Game.find(sgm.games[current_user.id])
+      game = Game.find(@sgm.games[current_user.id])
       if role == :reader
         render js: "window.location.pathname = #{game_reader_path(game.id, game.reader.id).to_json}"
       elsif role == :guesser
