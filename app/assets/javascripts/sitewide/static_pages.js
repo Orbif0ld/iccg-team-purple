@@ -114,6 +114,7 @@ var add_listeners = function () {
     // queue when the queue-preferences are submitted
     $("#submit_preferences_button").on("click", function () {
         waiting_for_invite = true;
+        waiting_for_accepts = false;
         $.ajax({
             type: "POST",
             url: "/sync_games_managers/enqueue",
