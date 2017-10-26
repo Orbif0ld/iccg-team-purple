@@ -2,14 +2,34 @@
   <div class="modal-dialog">
 
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Game Over</h4>
+      <div class="modal-header" style="background:orange">
+        <center><h1 class="modal-title">Game Over</h1></center>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
+        <center>
+          <h2>
+            <% num_played =  @player.get_scores[:reader]  + @player.get_scores[:guesser]%>
+            <% pluralization = if num_played == 1 then " was" else "s were" end %>
+            <%= @player.get_scores[:reader] %> round<%= pluralization %> played.
+          </h2>
+          <h2>
+            <% convinced_num =  @player.get_scores[:reader] %>
+            <% pluralization = if convinced_num == 1 then "" else "s" end %>
+            The reader convinced  the judge of his identity <%= @player.get_scores[:reader] %> time<%= pluralization %>.
+          </h2>
+          <h2>
+            <% deceived_num =  @player.get_scores[:guesser] %>
+            <% pluralization = if convinced_num == 1 then "" else "s" end %>
+            The guesser deceived the judge <%= @player.get_scores[:guesser] %> time<%= pluralization %>.
+          </h2>
+        </center>
       </div>
       <div class="modal-footer">
-        <button id="game_over_leave_button" type="button" class="btn btn-default">Leave</button>
+        <center>
+          <button id="game_over_leave_button" type="button" class="btn btn-warning btn-lg">
+            Leave
+          </button>
+        </center>
       </div>
     </div>
 
