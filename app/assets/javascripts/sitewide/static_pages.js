@@ -71,13 +71,15 @@ var update_invite_status = function () {
             dataType: "JSON",
             success: function (user) {
                 $("#invite_status_indicator").text(user.invite_status + " users have accepted");
-                // if someone declines, hide the modal
+                // if someone declines, reset and hide the modal
                 if (!(user.game_available || user.game_started)) {
                     $("#invite_status_indicator").text("Somebody declined the game.");
                     setTimeout(function() {
                         $("#invite_modal").modal("hide");
                         update(); // make sure that dequeue buttons are visible
                                   // (because this user is still queued).
+                        waiting_for_invite = true; // reset indicator variables
+                        waiting_for_accetps = false;
                     }, 3000);
 
                 // send to game, reset and close the modal, once everyone has accepted
