@@ -17,6 +17,7 @@ var show_sign_in_if_logged_out = function () {
     });
 };
 
+// check user's stat and show/hide queue/dequeue buttons accordingly
 var update = function() {
     $.ajax({
         type: "GET",
@@ -42,6 +43,7 @@ var update = function() {
         }});
 };
 
+// checks if user has an invite. If so, displays the modal and sets indicator variables.
 var check_for_invite = function () {
     if (waiting_for_invite) {
         $.ajax({
@@ -60,6 +62,7 @@ var check_for_invite = function () {
     };
 }
 
+// check whether anyone else accepted or declined the invite and act accordingly
 var update_invite_status = function () {
     if (waiting_for_accepts) {
         $.ajax({
@@ -68,12 +71,16 @@ var update_invite_status = function () {
             dataType: "JSON",
             success: function (user) {
                 $("#invite_status_indicator").text(user.invite_status + " users have accepted");
+                // if someone declines, hide the modal
                 if (!(user.game_available || user.game_started)) {
                     $("#invite_status_indicator").text("Somebody declined the game.");
                     setTimeout(function() {
                         $("#invite_modal").modal("hide");
+                        update(); // make sure that dequeue buttons are visible
+                                  // (because this user is still queued).
                     }, 3000);
-                        
+
+                // send to game, reset and close the modal, once everyone has accepted
                 } else if (user.game_started) {
                     waiting_for_accepts = false;
                     $.get("/sync_games_managers/send_to_game");
