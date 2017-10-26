@@ -15,39 +15,36 @@ end
 
 
 User.create!(name:  "Kirill",
-            email: "kirmesh@gmail.com",
-            password:              "super_pw",
-            password_confirmation: "super_pw",
-            admin: true)
-
-User.create!(name:  "CoolOrcaGuy",
-            email: "orcinus@orca.ocean",
-            password:              "super_pw",
-            password_confirmation: "super_pw",
-            admin: true)
-
-User.create!(name:  "Sam",
-            email: "sam@sg1.gov",
-            password:              "super_pw",
-            password_confirmation: "super_pw",
-            admin: true)
-
-
-# # Create fake user for development porposes
- User.create!(name:  "sesaba23",
-             email: "sesaba23@gmail.com",
-             password:              "foobar",
-             password_confirmation: "foobar",
+             email: "kirmesh@gmail.com",
+             password:              "super_pw",
+             password_confirmation: "super_pw",
              admin: true)
 
- 3.times do |n|
-      #name  = Faker::Name.name
-      name = "user-#{n+1}"
-      email = "user-#{n+1}@team-red.org"
-      password = "password"
-      User.create!(name:  name,
-                   email: email,
-                   password:              "foobar",
-                   password_confirmation: "foobar",
-                   admin: false)
- end
+User.create!(name:  "CoolOrcaGuy",
+             email: "orcinus@orca.ocean",
+             password:              "super_pw",
+             password_confirmation: "super_pw",
+             admin: true)
+
+User.create!(name:  "Sam",
+             email: "sam@sg1.gov",
+             password:              "super_pw",
+             password_confirmation: "super_pw",
+             admin: true)
+
+
+User.create!(name:  "Jack",
+             email: "Oneill@sg1.gov",
+             password:              "super_pw",
+             password_confirmation: "super_pw",
+             admin: true)
+
+3.times do |n|
+  name = "user-#{n+1}"
+  email = "user-#{n+1}@team-red.org"
+  User.create!(name:  name,
+               email: email,
+               password:              "super_pw",
+               password_confirmation: "super_pw",
+               admin: false)
+end

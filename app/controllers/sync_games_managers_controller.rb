@@ -48,14 +48,15 @@ class SyncGamesManagersController < ApplicationController
   end
 
   def send_to_game
-    role = @sgm.playing_as current_user
     if @sgm.game_started_for current_user
+      role = @sgm.playing_as current_user
+      game = Game.find(sgm.games[current_user.id])
       if role == :reader
-        render js: "window.location.pathname = #{game_reader_path(@sgm.games[current_user.id], current_user.id).to_json}"
+        render js: "window.location.pathname = #{game_reader_path(game.id, game.reader.id).to_json}"
       elsif role == :guesser
-        render js: "window.location.pathname = #{game_guesser_path(@sgm.games[current_user.id], current_user.id).to_json}"
+        render js: "window.location.pathname = #{game_guesser_path(game.id, game.guesser.id).to_json}"
       elsif role == :judge
-        render js: "window.location.pathname = #{game_judge_path(@sgm.games[current_user.id], current_user.id).to_json}"
+        render js: "window.location.pathname = #{game_judge_path(game.id, game.judge.id).to_json}"
       else
         raise StandardError "should never get here"
       end

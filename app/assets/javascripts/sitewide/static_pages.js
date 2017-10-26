@@ -23,12 +23,21 @@ var update = function() {
         url: '/sync_games_managers/user_activity',
         dataType: "JSON",
         success: function (user) {
+
+            // show queue/dequeue buttons when appropriate
             if (user.activity != "queued") {
                 $("#cleansing_fire,#central_dequeue").hide();
                 $("#queue_button").show();
             } else {
                 $("#cleansing_fire,#central_dequeue").show();
                 $("#queue_button").hide();
+            };
+
+            // show the quit game button if the user is registered as playing 
+            if (user.activity != "playing") {
+                $("#quit_game_button").hide();
+            } else {
+                $("#quit_game_button").show();
             };
         }});
 };
@@ -81,6 +90,7 @@ var add_listeners = function () {
         console.log("Hello!");
         $("#signup_modal").modal("hide");
         $("#error_msg").hide()
+        location.reload(true); //reload from server for redirect in case player is in a game
     }).on("ajax:error", function () {
         console.log("Wrong email or password.");
         $("#error_msg").show()
@@ -150,6 +160,14 @@ var add_listeners = function () {
             }
         });
     });
+
+    // pressing the quit game button removes the player from the game
+    // and redirects to home
+    $("#quit_game_button").on("click", function () {
+        $.post($("#info").data("quit_game_path"), function () {
+            document.location.href = "/";
+        });
+    });
 }
 
 var periodic_events = function () {
@@ -162,6 +180,21 @@ var init = function() {
     add_listeners();
     update();
     periodic_events();
+    $('#vote_to_quit_modal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
+    $('#signup_modal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
+    $('#game_over_modal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
 };
 
 $(init);

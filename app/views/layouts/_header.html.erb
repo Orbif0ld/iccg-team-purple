@@ -11,6 +11,7 @@
       <li><a id="cleansing_fire" style="cursor:pointer" hidden><span class="glyphicon glyphicon-fire" style="color:orange"></span> Dequeue</a></li>
       <li><a href=<%=logout_path%> data-method="delete" data-remote="true"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
     </ul>
+    <button id="quit_game_button" class="btn btn-danger navbar-btn navbar-right">Quit Game</button>
   </div>
 </nav>
 
@@ -44,12 +45,12 @@
     </div>
     
   </div>
-</div><div id="signup_modal" class="modal fade" role="document">
+</div>
+<div id="signup_modal" class="modal fade" role="document">
   <div class="modal-dialog">
     
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Who are you?</h4>
       </div>
       <div class="modal-body">
@@ -101,3 +102,5 @@
     
   </div>
 </div>
+
+<div id="info" data-quit_game_path=<%= quit_game_sync_games_managers_path %>></div>
