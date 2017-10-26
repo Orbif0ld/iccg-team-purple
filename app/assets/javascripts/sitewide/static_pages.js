@@ -164,7 +164,7 @@ var add_listeners = function () {
     // pressing the quit game button removes the player from the game
     // and redirects to home
     $("#quit_game_button").on("click", function () {
-        $.post($("#info").data("quit_game_path"), function () {
+        $.post($("#header_info").data("quit_game_path"), function () {
             document.location.href = "/";
         });
     });
