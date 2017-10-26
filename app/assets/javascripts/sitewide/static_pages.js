@@ -205,6 +205,12 @@ var init = function() {
         keyboard: false,
         show: false
     });
+    $('#invite_modal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
+    
 };
 
 $(init);
