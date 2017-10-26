@@ -14926,6 +14926,15 @@ var add_listeners = function () {
     $("#whiteboard").click(function() {
         wb_ui.toggle();
     });
+
+    // tell the server that the user is leavnig the game and
+    // go back to the home page when leaving the end of game modal
+    $("#game_over_leave_button").click(function() {
+        $.post($("#header_info").data("quit_game_path"), function () {
+            $("#game_over_modal").modal("hide");
+            document.location.href = "/";
+        });
+    });
 };
 
 var same = function (reference, data) {
@@ -14948,15 +14957,22 @@ var data = {};
 
 var add_poll = function () {
 
+    var end_of_game_modal_shown = false;
+
     if ($("#info").data("role") != "guesser") {return;};
 
     setInterval(function () {
         $.getJSON($("#info").data("source"), function (new_data) {
+            if (end_of_game_modal_shown) {return;}
             data = new_data;
             round_ui.populate(data);
-            
-            if (data.new_round && (round_ui.does_not_display("waiting for question") &&
-                                   round_ui.does_not_display("question form"))) {
+            if(data.game_over) {
+                console.log("game is over");
+                $("#game_over_modal").modal("show");
+                end_of_game_modal_shown = true;
+            } else if (data.new_round &&
+                       (round_ui.does_not_display("waiting for question") &&
+                        round_ui.does_not_display("question form"))) {
                 $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
                 $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
                 if (data.is_questioner) {
@@ -14968,8 +14984,6 @@ var add_poll = function () {
                 round_ui.show_answer_form();
             } else if (data.reviewing && round_ui.does_not_display("review")) {
                 round_ui.show_review();    
-            } else if (data.game_over) {
-                console.log("game is over");
             };
         });
     }, 1000);
@@ -15162,16 +15176,31 @@ var add_listeners = function () {
             setTimeout(answers.deselect, 200);
         }, 300);
     });
+
+    // tell the server that the user is leavnig the game and
+    // go back to the home page when leaving the end of game modal
+    $("#game_over_leave_button").click(function() {
+        $.post($("#header_info").data("quit_game_path"), function () {
+            $("#game_over_modal").modal("hide");
+            document.location.href = "/";
+        });
+    });
 };
 
 var add_poll = function () {
+
+    var end_of_game_modal_shown = false;
 
     if ($("#info").data("role") != "judge") {return;};
     
     setInterval( function () {
         $.getJSON($("#info").data("source"), function (data) {
-
-            if (data.question_available &&
+            if (end_of_game_modal_shown) {return;}
+            if (data.game_over) {
+                console.log("game is over");
+                $("#game_over_modal").modal("show");
+                end_of_game_modal_shown = true;
+            } else if (data.question_available &&
                 judge_ui.does_not_display("waiting for answers")) {
                 judge_ui.set_question(data.question);
             } else if (data.answers_available &&
@@ -15181,8 +15210,6 @@ var add_poll = function () {
             } else if (judge_ui.displays("waiting for question")) {
                 $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
                 $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
-            } else if (data.game_over) {
-                console.log("game is over");
             };
             
         })
@@ -15242,6 +15269,15 @@ var add_listeners = function () {
     $("#document").click(function() {
         doc_ui.toggle();
     });
+
+    // tell the server that the user is leavnig the game and
+    // go back to the home page when leaving the end of game modal
+    $("#game_over_leave_button").click(function() {
+        $.post($("#header_info").data("quit_game_path"), function () {
+            $("#game_over_modal").modal("hide");
+            document.location.href = "/";
+        });
+    });
 };
 
 var same = function (reference, data) {
@@ -15267,17 +15303,25 @@ var data = {};
 
 var add_poll = function () {
 
+    var end_of_game_modal_shown = false;
+
     if ($("#info").data("role") != "reader") {return;};
 
     //$.get($("#info").data("source"), function(d) {data = d;});
 
     setInterval(function () {
         $.getJSON($("#info").data("source"), function (new_data) {
+            if (end_of_game_modal_shown) {return;}
             data = new_data;
             round_ui.populate(data);
             
-            if (data.new_round && (round_ui.does_not_display("waiting for question") &&
-                                   round_ui.does_not_display("question form"))) {
+            if(data.game_over) {
+                console.log("game is over");
+                $("#game_over_modal").modal("show");
+                end_of_game_modal_shown = true;
+            } else if (data.new_round &&
+                       (round_ui.does_not_display("waiting for question") &&
+                        round_ui.does_not_display("question form"))) {
                 $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
                 $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
                 if (data.is_questioner) {
@@ -15289,8 +15333,6 @@ var add_poll = function () {
                 round_ui.show_answer_form();
             } else if (data.reviewing && round_ui.does_not_display("review")) {
                 round_ui.show_review();
-            } else if (data.game_over) {
-                console.log("game is over");
             };
         });
     }, 1000);
@@ -15321,6 +15363,7 @@ var show_sign_in_if_logged_out = function () {
     });
 };
 
+// check user's stat and show/hide queue/dequeue buttons accordingly
 var update = function() {
     $.ajax({
         type: "GET",
@@ -15346,6 +15389,7 @@ var update = function() {
         }});
 };
 
+// checks if user has an invite. If so, displays the modal and sets indicator variables.
 var check_for_invite = function () {
     if (waiting_for_invite) {
         $.ajax({
@@ -15364,6 +15408,7 @@ var check_for_invite = function () {
     };
 }
 
+// check whether anyone else accepted or declined the invite and act accordingly
 var update_invite_status = function () {
     if (waiting_for_accepts) {
         $.ajax({
@@ -15372,12 +15417,18 @@ var update_invite_status = function () {
             dataType: "JSON",
             success: function (user) {
                 $("#invite_status_indicator").text(user.invite_status + " users have accepted");
+                // if someone declines, reset and hide the modal
                 if (!(user.game_available || user.game_started)) {
                     $("#invite_status_indicator").text("Somebody declined the game.");
                     setTimeout(function() {
                         $("#invite_modal").modal("hide");
+                        update(); // make sure that dequeue buttons are visible
+                                  // (because this user is still queued).
+                        waiting_for_invite = true; // reset indicator variables
+                        waiting_for_accetps = false;
                     }, 3000);
-                        
+
+                // send to game, reset and close the modal, once everyone has accepted
                 } else if (user.game_started) {
                     waiting_for_accepts = false;
                     $.get("/sync_games_managers/send_to_game");
@@ -15409,6 +15460,7 @@ var add_listeners = function () {
     // queue when the queue-preferences are submitted
     $("#submit_preferences_button").on("click", function () {
         waiting_for_invite = true;
+        waiting_for_accepts = false;
         $.ajax({
             type: "POST",
             url: "/sync_games_managers/enqueue",
@@ -15499,6 +15551,12 @@ var init = function() {
         keyboard: false,
         show: false
     });
+    $('#invite_modal').modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: false
+    });
+    
 };
 
 $(init);

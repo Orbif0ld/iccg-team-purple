@@ -179,16 +179,31 @@ var add_listeners = function () {
             setTimeout(answers.deselect, 200);
         }, 300);
     });
+
+    // tell the server that the user is leavnig the game and
+    // go back to the home page when leaving the end of game modal
+    $("#game_over_leave_button").click(function() {
+        $.post($("#header_info").data("quit_game_path"), function () {
+            $("#game_over_modal").modal("hide");
+            document.location.href = "/";
+        });
+    });
 };
 
 var add_poll = function () {
+
+    var end_of_game_modal_shown = false;
 
     if ($("#info").data("role") != "judge") {return;};
     
     setInterval( function () {
         $.getJSON($("#info").data("source"), function (data) {
-
-            if (data.question_available &&
+            if (end_of_game_modal_shown) {return;}
+            if (data.game_over) {
+                console.log("game is over");
+                $("#game_over_modal").modal("show");
+                end_of_game_modal_shown = true;
+            } else if (data.question_available &&
                 judge_ui.does_not_display("waiting for answers")) {
                 judge_ui.set_question(data.question);
             } else if (data.answers_available &&
@@ -198,8 +213,6 @@ var add_poll = function () {
             } else if (judge_ui.displays("waiting for question")) {
                 $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
                 $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
-            } else if (data.game_over) {
-                console.log("game is over");
             };
             
         })

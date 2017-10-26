@@ -16,6 +16,15 @@ var add_listeners = function () {
     $("#whiteboard").click(function() {
         wb_ui.toggle();
     });
+
+    // tell the server that the user is leavnig the game and
+    // go back to the home page when leaving the end of game modal
+    $("#game_over_leave_button").click(function() {
+        $.post($("#header_info").data("quit_game_path"), function () {
+            $("#game_over_modal").modal("hide");
+            document.location.href = "/";
+        });
+    });
 };
 
 var same = function (reference, data) {
@@ -38,15 +47,22 @@ var data = {};
 
 var add_poll = function () {
 
+    var end_of_game_modal_shown = false;
+
     if ($("#info").data("role") != "guesser") {return;};
 
     setInterval(function () {
         $.getJSON($("#info").data("source"), function (new_data) {
+            if (end_of_game_modal_shown) {return;}
             data = new_data;
             round_ui.populate(data);
-            
-            if (data.new_round && (round_ui.does_not_display("waiting for question") &&
-                                   round_ui.does_not_display("question form"))) {
+            if(data.game_over) {
+                console.log("game is over");
+                $("#game_over_modal").modal("show");
+                end_of_game_modal_shown = true;
+            } else if (data.new_round &&
+                       (round_ui.does_not_display("waiting for question") &&
+                        round_ui.does_not_display("question form"))) {
                 $("#wb_head_refresh").load($("#info").data("wb_head_refresh_path"));
                 $("#whiteboard_body").load($("#info").data("wb_tail_refresh_path"));
                 if (data.is_questioner) {
@@ -58,8 +74,6 @@ var add_poll = function () {
                 round_ui.show_answer_form();
             } else if (data.reviewing && round_ui.does_not_display("review")) {
                 round_ui.show_review();    
-            } else if (data.game_over) {
-                console.log("game is over");
             };
         });
     }, 1000);
