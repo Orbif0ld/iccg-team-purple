@@ -7,21 +7,9 @@
       </div>
       <div class="modal-body">
         <center>
-          <h2>
-            <% num_played =  @player.get_scores[:reader]  + @player.get_scores[:guesser]%>
-            <% pluralization = if num_played == 1 then " was" else "s were" end %>
-            <%= @player.get_scores[:reader] %> round<%= pluralization %> played.
-          </h2>
-          <h2>
-            <% convinced_num =  @player.get_scores[:reader] %>
-            <% pluralization = if convinced_num == 1 then "" else "s" end %>
-            The reader convinced  the judge of his identity <%= @player.get_scores[:reader] %> time<%= pluralization %>.
-          </h2>
-          <h2>
-            <% deceived_num =  @player.get_scores[:guesser] %>
-            <% pluralization = if convinced_num == 1 then "" else "s" end %>
-            The guesser deceived the judge <%= @player.get_scores[:guesser] %> time<%= pluralization %>.
-          </h2>
+          <h2 id="report_line_1"></h2>
+          <h2 id="report_line_2"></h2>
+          <h2 id="report_line_3"></h2>
         </center>
       </div>
       <div class="modal-footer">

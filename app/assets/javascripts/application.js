@@ -17,5 +17,6 @@
 //= require turbolinks
 //= require document
 //= require whiteboard
+//= require end_of_game.js
 //= require round_ui
 //= require_tree .

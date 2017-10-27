@@ -85,6 +85,7 @@ var add_poll = function () {
             
             if(data.game_over) {
                 console.log("game is over");
+                populate_end_of_game_modal(data);
                 $("#game_over_modal").modal("show");
                 end_of_game_modal_shown = true;
             } else if (data.new_round &&

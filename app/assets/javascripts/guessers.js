@@ -20,6 +20,7 @@ var add_listeners = function () {
     // tell the server that the user is leavnig the game and
     // go back to the home page when leaving the end of game modal
     $("#game_over_leave_button").click(function() {
+        console.log("clicked leave button");
         $.post($("#header_info").data("quit_game_path"), function () {
             $("#game_over_modal").modal("hide");
             document.location.href = "/";
@@ -58,6 +59,7 @@ var add_poll = function () {
             round_ui.populate(data);
             if(data.game_over) {
                 console.log("game is over");
+                populate_end_of_game_modal(data);
                 $("#game_over_modal").modal("show");
                 end_of_game_modal_shown = true;
             } else if (data.new_round &&

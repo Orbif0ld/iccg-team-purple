@@ -201,6 +201,7 @@ var add_poll = function () {
             if (end_of_game_modal_shown) {return;}
             if (data.game_over) {
                 console.log("game is over");
+                populate_end_of_game_modal(data);
                 $("#game_over_modal").modal("show");
                 end_of_game_modal_shown = true;
             } else if (data.question_available &&
