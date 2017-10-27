@@ -319,7 +319,8 @@ class SyncGamesManager < ApplicationRecord
         compatible_judges = compatible guesser_judges, reader
         next if compatible_judges.empty?
         judge = compatible_judges.sample
-        return reader, guesser, judge, judge.documents.sample
+        documents = reader.documents & guesser.documents & judge.documents
+        return reader, guesser, judge, documents.sample
       end
     end
     return false

@@ -27,7 +27,7 @@ require 'rails_helper'
 describe SyncGamesManager do
   before(:each) do
     ## ONLY ONE DOCUMENT MAY BE MADE AVAILABLE HERE (otherwise some tests break)
-    @document1 = FactoryGirl.create :document, kind: "text", title: "orcas",
+    @document1 = FactoryGirl.create :document, id: 1, kind: "text", title: "orcas",
                                     content: "Orcas are appex predators. They live in all oceans."
     # @document2 = FactoryGirl.create :document, kind: "text", title: "Muad'Dib",
     #                                 content: "Muad'Dib is a type of desert mouse, but it's also the chosen name of Paul Muad'Dib, the Lisan al Gaib."
@@ -42,6 +42,94 @@ describe SyncGamesManager do
     SyncGamesManager.first.destroy if SyncGamesManager.first
     SyncGamesManager.get
     @sgm = SyncGamesManager.get
+  end
+  describe "if there are 3 users and 3 documents" do
+    it "the users should be able play 3 games, one with each document" do
+      @document2 = FactoryGirl.create :document, id: 2, kind: "text", title: "sloop-of-war",
+                                      content: "A sloop-of-war is a ship with one gun deck."
+      @document3 = FactoryGirl.create :document, id: 3, kind: "text", title: "stargate",
+                                      content: "The stargate is fictional device which allows traveling to distant plantes via wormholes."
+      expect(Document.all.size).to eq(3)
+
+      game_doc_ids = []
+
+      ## first game
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+      @sgm.joins_game User.find(1)
+      @sgm.joins_game User.find(2)
+      @sgm.joins_game User.find(3)
+      user_game = Game.find(@sgm.games[1])
+      @sgm.quits_game User.find(1)
+      @sgm.quits_game User.find(2)
+      @sgm.quits_game User.find(3)
+
+      expect(user_game.document.id).to eq(Game.find(1).document.id)
+      
+      game_1_document = Game.first.document
+      
+      expect(User.find(1).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id)
+      expect(User.find(2).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id)
+      expect(User.find(3).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id)
+
+      expect(Game.all.size).to eq(1)
+      expect(Game.first.id).to eq(1)
+      game_doc_ids << Game.find(1).document.id
+
+      ## second game
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+      @sgm.joins_game User.find(1)
+      @sgm.joins_game User.find(2)
+      @sgm.joins_game User.find(3)
+      @sgm.quits_game User.find(1)
+      @sgm.quits_game User.find(2)
+      @sgm.quits_game User.find(3)
+
+      game_2_document = Game.find(2).document
+      
+      expect(User.find(1).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id)
+      expect(User.find(2).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id)
+      expect(User.find(3).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id)
+
+      game_doc_ids << Game.find(2).document.id
+
+      ## third game
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+      @sgm.joins_game User.find(1)
+      @sgm.joins_game User.find(2)
+      @sgm.joins_game User.find(3)
+      @sgm.quits_game User.find(1)
+      @sgm.quits_game User.find(2)
+      @sgm.quits_game User.find(3)
+
+      game_3_document = Game.find(3).document
+      
+      expect(User.find(1).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id, game_3_document.id)
+      expect(User.find(2).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id, game_3_document.id)
+      expect(User.find(3).familiar_documents.map{|d| d.id}).to contain_exactly(game_1_document.id, game_2_document.id, game_3_document.id)
+
+      game_doc_ids << Game.find(3).document.id
+
+      ### all docs have been played with
+      game_doc_names = game_doc_ids.map{|i| Document.find(i).title}
+      puts game_doc_names
+      expect(game_doc_ids).to contain_exactly(1,2,3)
+
+      ## fourth game
+      @sgm.enqueues User.find(1)
+      @sgm.enqueues User.find(2)
+      @sgm.enqueues User.find(3)
+
+      ### no game should be available
+      expect(@sgm.queued_users.size).to eq(3)
+      expect(@sgm.invited_users.size).to eq(0)
+      
+    end
   end
   describe "if a player rejects an invite" do
     it "2 players should be place back in the queue" do
