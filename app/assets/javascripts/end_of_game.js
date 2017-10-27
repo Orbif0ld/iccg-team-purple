@@ -14,8 +14,8 @@ var report = function (data) {
 
     var r1 = num_rounds + " round" + pluralization1 + " played.";
     var r2 = "The reader convinced the judge of his identity " + num_convinced +
-        " time" + pluralization2;
-    var r3 = "The guesser deceived the judge " + num_deceived + " time" + pluralization3;
+        " time" + pluralization2 + ".";
+    var r3 = "The guesser deceived the judge " + num_deceived + " time" + pluralization3 + ".";
 
     var report = {line1: r1, line2: r2, line3: r3};
 
