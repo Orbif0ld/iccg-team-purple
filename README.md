@@ -49,14 +49,17 @@ in a separate terminal window. You can then use the methods in sync_games_manage
 
 For example, supposed you’ve logged in as the user with user_id = 1. (To see which user has which id you can run *User.all.map{|usr| [usr.name, usr.id]}* in rails console.) To simulate a game with users with ids 2 and 3, in rails console write:
 
-*Sgm = SyncGamesManager.get
-Sgm.enqueues User.find(2)
-Sgm.enqueues User.find(3)*
+*Sgm = SyncGamesManager.get*
+
+*Sgm.enqueues User.find(2)*
+
+*Sgm.enqueues User.find(3)*
 
 If you press the queue button in the browser after executing these commands in rails console, an invitation to join a game should appear. To simulate users 2 and 3 accepting the invitation execute
 
-*Sgm.joins_game User.find(2)
-Sgm.joins_game User.find(3)*
+*Sgm.joins_game User.find(2)*
+
+*Sgm.joins_game User.find(3)*
 
 If you now accept the invitation in the browser, you should get redirected to the new game. Assuming that it’s the first game played since the database was initialized, you can access the game in console by executing
 
@@ -80,8 +83,9 @@ When this has finished push your version of the game to heroku like so:
 
 To set up the database on Heroku, run
 
-*heroku run rake db:migrate
-heroku run rake db:seed*
+*heroku run rake db:migrate*
+
+*heroku run rake db:seed*
 
 Your version of the game should now be available as a new heroku app.
 
