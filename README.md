@@ -1,4 +1,5 @@
 Mooqita’s ICCG challenge
+
 The objective of the challenge was to develop an implementation of the game described in Toward a comprehension challenge, using crowdsourcing as a tool by P. Paritosh and G. Marcus.
 
 The source code is on github: https://github.com/Orbif0ld/iccg-team-purple
