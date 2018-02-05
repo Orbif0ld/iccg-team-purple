@@ -89,4 +89,4 @@ To set up the database on Heroku, run
 
 Your version of the game should now be available as a new heroku app.
 
-For more information see deploying to Heroku.
+For more information see [deploying to heroku](https://devcenter.heroku.com/articles/getting-started-with-rails5#deploy-your-application-to-heroku).
