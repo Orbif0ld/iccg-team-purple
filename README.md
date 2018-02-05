@@ -4,7 +4,9 @@ The objective of the challenge was to develop an implementation of the game desc
 
 The source code is on github: https://github.com/Orbif0ld/iccg-team-purple
 The app is deployed on heroku: https://dry-fjord-40579.herokuapp.com/
-Installing and running the ICCG app locally
+
+## Installing and running the ICCG app locally
+
 The following explains how to run the app locally on a new Ubuntu installation, that is, assuming nothing has already been installed.
 
 To install and run the app locally in your browser, open the terminal and install the required libraries by running
@@ -37,7 +39,7 @@ To start the app locally, type
 
 Locally, open a browser and access http://localhost:3000. The browser should now load the app.
 
-# Playing around with the app
+## Playing around with the app
 
 You can always play the game with 2 of your friends on heroku. If you want to run it on your own computer and play around with it on your own, three different browsers would be necessary to start and play a game. A game can be simulated using one browser however, by running
 
@@ -66,7 +68,7 @@ If you now accept the invitation in the browser, you should get redirected to th
 
 will simulate her submission.
 
-# Deploying to Heroku
+## Deploying to Heroku
 
 In order to deploy your own version of the game to heroku, assuming you have a Heroku account and the Heroku toolbelt installed, run
 
