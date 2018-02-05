@@ -1,4 +1,4 @@
-_Mooqita’s ICCG challenge_
+# Mooqita’s ICCG challenge
 
 The objective of the challenge was to develop an implementation of the game described in Toward a comprehension challenge, using crowdsourcing as a tool by P. Paritosh and G. Marcus.
 
@@ -37,7 +37,7 @@ To start the app locally, type
 
 Locally, open a browser and access http://localhost:3000. The browser should now load the app.
 
-_Playing around with the app_
+# Playing around with the app
 
 You can always play the game with 2 of your friends on heroku. If you want to run it on your own computer and play around with it on your own, three different browsers would be necessary to start and play a game. A game can be simulated using one browser however, by running
 
@@ -66,7 +66,7 @@ If you now accept the invitation in the browser, you should get redirected to th
 
 will simulate her submission.
 
-_Deploying to Heroku_
+# Deploying to Heroku
 
 In order to deploy your own version of the game to heroku, assuming you have a Heroku account and the Heroku toolbelt installed, run
 
